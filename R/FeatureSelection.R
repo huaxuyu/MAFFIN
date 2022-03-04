@@ -7,14 +7,17 @@
 #' @param RtRange Range of the defined retention time window, in minute.
 #' @param QCRSD Relative standard deviation threshold for QC samples
 #' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9)
-#' @param SampleInCol \code{TRUE} if samples are in column.
+#' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
+#' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
 #'
-#' @details  The first row should be sample names, and the second row should be group names.
-#' For group names, please use: "RT" for retention time column,
-#' "QC" for quality control samples between real samples (normal QC samples);
-#' "blank" for blank samples;
-#' "SQC_#amount#" for serial QC samples with a certain loading amount. For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL;
+#' @details  The first row should be sample names, and the second row should be group names.\cr
+#' For group names, please use: \cr
+#' "RT" for retention time column; \cr
+#' "QC" for quality control samples between real samples (normal QC samples); \cr
+#' "blank" for blank samples; \cr
+#' "SQC_###" for serial QC samples with a certain loading amount.
+#' For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL.
 #'
 #' @return
 #' This function will return the original feature table with an extra column named "Quality" to indicate the feature quality
@@ -24,127 +27,138 @@
 
 
 FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
-                            QCRSD=0.25, SQCcor=0.9, SampleInCol=TRUE, output=FALSE){
-
-  f_table = read.csv(inputfile_name)
-  group_seq = as.character(f_table[1,])
-  group_unique = unique(group_seq[-1])
-  f_table = as.matrix(sapply(f_table[-1,], as.numeric))
-
-  derep_table = data.frame(matrix(data = 1, nrow = nrow(f_table), ncol = 5))
-  colnames(derep_table) = c("Identifier", "MB", "RT", "QC_RSD", "Pearson_cor")
-  derep_table[,1] = f_table[,1]
-
+                            QCRSD=0.25, SQCcor=0.9, IntThreshold=0,
+                            SampleInCol=TRUE, output=FALSE){
   message("Selecting high-quality features...")
 
-  blank_table = c()
+  # Transpose FeatureTable if samples are in row
+  if (!SampleInCol) {
+    FeatureTable = t(FeatureTable)
+  }
+  filter.blank = filter.SQC = TRUE
 
-  if(length(grep("blank", group_seq, ignore.case = T)) != 0 & !is.na(blank_filter)){
-    blank_table = data.matrix(f_table[, grep("blank", group_seq, ignore.case = T)])
-    blank_table = apply(blank_table, 1, mean)
-  } else if(length(grep("blank", group_seq, ignore.case = T)) == 0 & !is.na(blank_filter)){
-    warning("Missed blank data. Filtering failed.")
-  } else if(length(grep("blank", group_seq, ignore.case = T)) != 0 & is.na(blank_filter)){
-    warning("Missed blank_filter parameter. Filtering failed.")
+  # Find names of sample groups
+  group_seq = tolower(as.character(FeatureTable[1,-1]))
+  group_unique = unique(group_seq[-1])
+
+  # Convert feature intensities to numeric values
+  # Remove the first row and column for downstream processing
+  IntTable = FeatureTable[-1,-1]
+
+  # Test if all cells in IntTable are numeric
+  IntTable = tryCatch(sapply(IntTable, as.numeric),warning=function(w) w)
+  if(is(IntTable,"warning")){
+    print("Non-numeric value is found in feature intensities. Return NA.")
+    return(NA)
   }
 
-
-  if(length(grep("SQC", group_seq, ignore.case = T)) != 0 & MRC){
-    SQC_index = grep("SQC", group_unique, ignore.case = T)
-    SQC_table = data.frame(matrix(nrow = nrow(f_table), ncol = length(SQC_index)))
-    for (i in 1:length(SQC_index)) {
-      SQC_table[,i] = apply(data.matrix(f_table[,group_unique[SQC_index[i]] == group_seq]), 1, mean)
-    }
-    colnames(SQC_table) = group_unique[SQC_index]
-  } else if(length(grep("SQC", group_seq, ignore.case = T)) == 0 & MRC){
-    warning("Serial QC data are missed or not correctly labeled.")
-  } else if(length(grep("SQC", group_seq, ignore.case = T)) != 0 & !MRC){
-    warning("MRC function is not turned on.")
-  }
-
-  QC_conc = c()
-  SQC.list = stringr::str_split(colnames(SQC_table), pattern = "_")
-  for (i in 1:ncol(SQC_table)) {
-    QC_conc[i] = as.numeric(SQC.list[[i]][2])
-  }
-
-  temp = grepl("QC_mid", group_seq ,ignore.case = T) | grepl("SQC", group_seq,
-                                                             ignore.case = T) | grepl("blank", group_seq, ignore.case = T) | grepl("rt", group_seq, ignore.case = T)
-  sample_table = data.matrix(f_table[, !temp])
-  sample_table2 = as.data.frame(sample_table)
-
-  group_vector = group_seq[!temp][-1]
-
-  RT_v = data.matrix(f_table[, grep("RT", group_seq, ignore.case = T)])
-
-  if(length(grep("QC_mid", group_seq, ignore.case = T)) != 0){
-    MQC_table = data.matrix(f_table[, grep("QC_mid", group_seq, ignore.case = T)])
-    if(!is.na(blank_filter)){
-      for (i in 1:nrow(f_table)) {
-        if(mean(MQC_table[i,]) < blank_table[i]*blank_filter) { derep_table[i,2] = 0 }
-      }
-    }
-    if(length(grep("QC_mid", group_seq, ignore.case = T)) >= 3){
-      for (i in 1:nrow(f_table)) {
-        if(mean(MQC_table[i,] == 0)){
-          derep_table[i,4] = 0
-        } else {
-          if(sd(MQC_table[i,])/mean(MQC_table[i,]) > RSD){
-            derep_table[i,4] = 0}
-        }
-      }
-    } else {
-      warning("QC data between samples are not enough to calculate RSD.")
-    }
-
-  } else {
-    if(!is.na(blank_filter)){
-      for (i in 1:nrow(f_table)) {
-        if(mean(sample_table[i,]) < blank_table[i]*blank_filter) { derep_table[i,2] = 0 }
-      }
-    }
-    warning("QC data between samples are missed or not correctly labeled.")
-  }
-
-
-  # Format of clean-up table. 1 for pass, 0 for fail.
+  # Generate a data frame to store the filtering results. 1 for pass, 0 for fail.
   # column 1: feature identifier
   # column 2: method blank filter result
   # column 3: retention time filter result
   # column 4: RSD in QC sample filter result
   # column 5: QC linearity filter result
+  derep_table = data.frame(matrix(data = 1, nrow = nrow(IntTable), ncol = 5))
+  colnames(derep_table) = c("Identifier", "MB", "RT", "QC_RSD", "Pearson_cor")
+  derep_table[,1] = FeatureTable[-1,1]
 
-  all_filter = c()
-  if(length(RT) == 2){
-    for (i in 1:nrow(f_table)) {
-      # Check retention time
-      if(RT_v[i] < RT[1] | RT_v[i] > RT[2]) { derep_table[i,3] = 0 }
+  # Generate a table to store intensities from all blank samples
+  blank_table = c()
+  temp = group_seq == "blank"
+  if(length(sum(temp)) == 0){
+    filter.blank = FALSE
+    message("Blank data are not detected.")
+  } else {
+    blank_table = data.matrix(IntTable[, temp])
+    if (length(sum(temp)) > 1) {
+      blank_table = apply(blank_table, 1, mean)
     }
   }
 
-  for (i in 1:nrow(f_table)) {
+  SQC_index = grep("SQC", group_unique, ignore.case = T)
+  if(length(SQC_index) == 0){
+    filter.SQC = FALSE
+    message("Serial QC data are not detected.")
+  } else if(length(SQC_index) < 5){
+    filter.SQC = FALSE
+    message("Serial QC data points are too less for evaluation (5 is required).")
+  } else{
+    SQC_table = data.frame(matrix(nrow = nrow(IntTable), ncol = length(SQC_index)))
+    colnames(SQC_table) = group_unique[SQC_index]
+    for (i in 1:length(SQC_index)) {
+      SQC_table[,i] = apply(data.matrix(IntTable[,group_unique[SQC_index[i]] == group_seq]), 1, mean)
+    }
+    QC_conc = c()
+    SQC.list = stringr::str_split(colnames(SQC_table), pattern = "_")
+    for (i in 1:ncol(SQC_table)) {
+      QC_conc[i] = as.numeric(SQC.list[[i]][2])
+    }
+  }
+
+  temp = group_seq=="qc" | grepl("SQC", group_seq,ignore.case = T) | group_seq=="blank" | group_seq=="rt"
+  sample_table = data.matrix(IntTable[, !temp])
+
+  group_vector = group_seq[!temp]
+
+  RT_v = data.matrix(IntTable[, group_seq=="rt"])
+
+  temp = group_seq=="qc"
+  if(length(sum(temp)) != 0){
+    MQC_table = data.matrix(IntTable[, temp])
+    if(filter.blank){
+      for (i in 1:nrow(IntTable)) {
+        if(mean(sample_table[i,]) < blank_table[i]*BlankFilter) { derep_table[i,2] = 0 }
+      }
+    }
+    if(length(sum(temp)) >= 3){
+      for (i in 1:nrow(IntTable)) {
+        if(mean(MQC_table[i,] == 0)){
+          derep_table[i,4] = 0
+        } else {
+          if(sd(MQC_table[i,])/mean(MQC_table[i,]) > QCRSD){
+            derep_table[i,4] = 0}
+        }
+      }
+    } else {
+      message("QC data are not enough to calculate RSD (3 is required).")
+    }
+  } else {
+    message("QC data (normal QC) are not detected.")
+  }
+
+
+  # Remove the features out of the defined retention time range
+  for (i in 1:nrow(IntTable)) {
+    # Check retention time
+    if(RT_v[i] < RtRange[1] | RT_v[i] > RtRange[2]) { derep_table[i,3] = 0 }
+  }
+
+  all_filter = rep("low", nrow(IntTable))
+
+  # Remove the features with low correlation in SQC samples
+  for (i in 1:nrow(IntTable)) {
     # Check serial diluted QC linearity
     QC_int = as.numeric(SQC_table[i,])
-    valid_int = which(QC_int > int_threshold)
+    valid_int = which(QC_int > IntThreshold)
     QC_int = QC_int[valid_int]
     selected_QC_conc = QC_conc[valid_int]
     selected_int_points = length(selected_QC_conc)
 
     if(selected_int_points <= 3){
       derep_table[i,5] = 0
-    } else if(cor(QC_int, selected_QC_conc) < QC_cor){
+    } else if(cor(QC_int, selected_QC_conc) < SQCcor){
       derep_table[i,5] = 0
     }
-    all_filter[i] = sum(derep_table[i,-1])
+    if (sum(derep_table[i,-1]) == 4) {
+      all_filter[i] = "high"
+    }
   }
 
-  sample_table = sample_table[all_filter == 4,]
-  SQC_table = SQC_table[all_filter == 4,]
+  FeatureTable$Quality = ""
+  FeatureTable$Quality[1] = "FeatureQuality"
+  FeatureTable$Quality[-1] = all_filter
 
   message("High-quality feature selection is done.")
-  message(paste0(nrow(sample_table), " features are selected from ", nrow(f_table), "."))
-
-
+  message(paste0(sum(all_filter=="high"), " features are selected from ", nrow(IntTable), "."))
 
 }
-

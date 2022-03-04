@@ -15,3 +15,6 @@ getmin(a)
 \description{
 Find min value
 }
+\examples{
+XXX
+}

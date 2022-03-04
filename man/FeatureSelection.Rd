@@ -10,6 +10,7 @@ FeatureSelection(
   RtRange = c(0, 100),
   QCRSD = 0.25,
   SQCcor = 0.9,
+  IntThreshold = 0,
   SampleInCol = TRUE,
   output = FALSE
 )
@@ -25,7 +26,9 @@ FeatureSelection(
 
 \item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9)}
 
-\item{SampleInCol}{\code{TRUE} if samples are in column.}
+\item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
+
+\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory}
 }
@@ -36,11 +39,13 @@ This function will return the original feature table with an extra column named 
 Select high-quality features for quantitative analysis.
 }
 \details{
-The first row should be sample names, and the second row should be group names.
-For group names, please use: "RT" for retention time column,
-"QC" for quality control samples between real samples (normal QC samples);
-"blank" for blank samples;
-"SQC_#amount#" for serial QC samples with a certain loading amount. For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL;
+The first row should be sample names, and the second row should be group names.\cr
+For group names, please use: \cr
+"RT" for retention time column; \cr
+"QC" for quality control samples between real samples (normal QC samples); \cr
+"blank" for blank samples; \cr
+"SQC_###" for serial QC samples with a certain loading amount.
+For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL.
 }
 \examples{
 Please see GitHub for demo.

@@ -5,7 +5,7 @@
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples XXX
 getmin = function(a){
   return(min(a))
 }
