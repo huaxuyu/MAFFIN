@@ -2,7 +2,7 @@
 % Please edit documentation in R/IntCorrection.R
 \name{IntCorrection}
 \alias{IntCorrection}
-\title{Intensity Correction Using Serial QC Samples}
+\title{Intensity correction using serial QC samples}
 \usage{
 IntCorrection(
   FeatureTable,
@@ -19,21 +19,21 @@ IntCorrection(
 
 \item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
-\item{LR_QC_points}{Required data points for quadratic regression (>= this value)}
+\item{LR_QC_points}{Required data points for quadratic regression (>= this value).}
 
-\item{QR_QC_points}{Required data points for cubic regression (>= this value)}
+\item{QR_QC_points}{Required data points for cubic regression (>= this value).}
 
-\item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9)}
+\item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).}
 
 \item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
 
-\item{output}{\code{TRUE} will output the result table in current working directory}
+\item{output}{\code{TRUE} will output the result table in current working directory.}
 }
 \value{
 This function will return the original feature table with corrected intensities.
 }
 \description{
-Intensity Correction Using Serial QC Samples
+Intensity correction using serial QC samples
 }
 \examples{
 Please see GitHub for demo.

@@ -2,8 +2,8 @@ Package: MAFFIN
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Huaxu Yu
+Maintainer: The package maintainer <hxyu@chem.ubc.ca>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
@@ -13,3 +13,6 @@ RoxygenNote: 7.1.2
 URL: https://github.com/Waddlessss/MAFFIN
 Depends: 
     R (>= 2.10)
+Imports: 
+    stringr,
+    polynom

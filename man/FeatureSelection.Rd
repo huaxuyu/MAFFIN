@@ -22,9 +22,9 @@ FeatureSelection(
 
 \item{RtRange}{Range of the defined retention time window, in minute.}
 
-\item{QCRSD}{Relative standard deviation threshold for QC samples}
+\item{QCRSD}{Relative standard deviation threshold for QC samples.}
 
-\item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9)}
+\item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).}
 
 \item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
 

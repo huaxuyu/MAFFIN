@@ -1,16 +1,16 @@
 
-#' Intensity Correction Using Serial QC Samples
+#' Intensity correction using serial QC samples
 #'
 #' @param FeatureTable Feature intensity table with samples in column and features in row (default).
 #' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
-#' @param LR_QC_points Required data points for quadratic regression (>= this value)
-#' @param QR_QC_points Required data points for cubic regression (>= this value)
-#' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9)
+#' @param LR_QC_points Required data points for quadratic regression (>= this value).
+#' @param QR_QC_points Required data points for cubic regression (>= this value).
+#' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
-#' @param output \code{TRUE} will output the result table in current working directory
+#' @param output \code{TRUE} will output the result table in current working directory.
 #'
 #' @return This function will return the original feature table with corrected intensities.
-#'
+#' @export
 #' @examples Please see GitHub for demo.
 IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_points=7,
                          SQCcor=0.9, SampleInCol=TRUE, output=FALSE){
@@ -27,12 +27,14 @@ IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_poi
 
   # Find names of sample groups
   group_seq = tolower(as.character(FeatureTable[1,-1]))
+  temp = !(group_seq=="featurequality")
+  group_seq = group_seq[temp]
   group_unique = unique(group_seq[-1])
 
   # Convert feature intensities to numeric values
   # Remove the first row and column for downstream processing
   IntTable = FeatureTable[-1,-1]
-
+  IntTable = IntTable[,temp]
   # Test if all cells in IntTable are numeric
   IntTable = tryCatch(sapply(IntTable, as.numeric),warning=function(w) w)
   if(is(IntTable,"warning")){
@@ -81,16 +83,17 @@ IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_poi
   }
 
   # Calibrate sample and QC intensities
-  temp = !(grepl("SQC", group_seq,ignore.case = T) | group_seq=="blank" | group_seq=="rt")
-  sample_table = data.matrix(IntTable[, temp])
+  temp = !(grepl("SQC", group_seq,ignore.case = T) | group_seq=="blank" | group_seq=="rt" |
+             group_seq=="featurequality")
+  sample_table = IntTable[,temp]
   temp_quality = FeatureTable$Quality[-1]
 
-  model = rep("cannot be calibrated", nrow(IntTable))
-  SQCpoint = rep("cannot be calibrated", nrow(IntTable))
+  model = rep(NA, nrow(sample_table))
+  SQCpoint = rep(NA, nrow(sample_table))
 
   pb <- txtProgressBar(min = 0, max = nrow(sample_table), style = 3)
 
-  for (i in 1:nrow(IntTable)) {
+  for (i in 1:nrow(sample_table)) {
     if (temp_quality[i] == "high") {
       QC_int = as.numeric(SQC_table[i,])
       valid_int = which(QC_int > IntThreshold)
@@ -115,7 +118,7 @@ IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_poi
           break
         }
       }
-      FeatureTable[i+1, c(FALSE,temp)] = calibrated_int
+      FeatureTable[i+1, c(FALSE,temp, FALSE)] = calibrated_int
       model[i] = model_pool[best_model+1]
       SQCpoint[i] = selected_int_points
       setTxtProgressBar(pb, i)

@@ -1,3 +1,4 @@
+
 #' High-quality feature selection
 #' @description
 #' Select high-quality features for quantitative analysis.
@@ -5,8 +6,8 @@
 #' @param FeatureTable Feature intensity table with samples in column and features in row (default).
 #' @param BlankFilter High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}
 #' @param RtRange Range of the defined retention time window, in minute.
-#' @param QCRSD Relative standard deviation threshold for QC samples
-#' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9)
+#' @param QCRSD Relative standard deviation threshold for QC samples.
+#' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
 #' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
@@ -18,7 +19,7 @@
 #' "blank" for blank samples; \cr
 #' "SQC_###" for serial QC samples with a certain loading amount.
 #' For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL.
-#'
+#' @export
 #' @return
 #' This function will return the original feature table with an extra column named "Quality" to indicate the feature quality.
 #'
@@ -103,14 +104,14 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   RT_v = data.matrix(IntTable[, group_seq=="rt"])
 
   temp = group_seq=="qc"
-  if(length(sum(temp)) != 0){
+  if(sum(temp) != 0){
     MQC_table = data.matrix(IntTable[, temp])
     if(filter.blank){
       for (i in 1:nrow(IntTable)) {
         if(mean(sample_table[i,]) < blank_table[i]*BlankFilter) { derep_table[i,2] = 0 }
       }
     }
-    if(length(sum(temp)) >= 3){
+    if(sum(temp) >= 3){
       for (i in 1:nrow(IntTable)) {
         if(mean(MQC_table[i,] == 0)){
           derep_table[i,4] = 0

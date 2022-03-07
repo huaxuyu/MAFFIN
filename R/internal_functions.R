@@ -33,7 +33,7 @@ bw_opt = function(df, group_vector, bw_seq = seq(0.1,10,0.1)) {
       sample_data = as.numeric(opt_df[i,])
       pRMAD_each[i] = pooled_rMAD(sample_data, group_vector)
     }
-    pRMAD[b] = median(pRMAD_each)
+    pRMAD[b] = median(pRMAD_each[!is.nan(pRMAD_each)])
     setTxtProgressBar(pb, b)
   }
   close(pb)
