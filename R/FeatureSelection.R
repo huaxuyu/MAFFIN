@@ -20,7 +20,7 @@
 #' For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL.
 #'
 #' @return
-#' This function will return the original feature table with an extra column named "Quality" to indicate the feature quality
+#' This function will return the original feature table with an extra column named "Quality" to indicate the feature quality.
 #'
 #' @examples
 #' Please see GitHub for demo.
@@ -158,7 +158,11 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   FeatureTable$Quality[1] = "FeatureQuality"
   FeatureTable$Quality[-1] = all_filter
 
+  if (output) {
+    write.csv(FeatureTable, "Feature_selection.csv")
+  }
+
   message("High-quality feature selection is done.")
   message(paste0(sum(all_filter=="high"), " features are selected from ", nrow(IntTable), "."))
-
+  return(FeatureTable)
 }

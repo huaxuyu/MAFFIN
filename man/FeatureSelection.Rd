@@ -33,7 +33,7 @@ FeatureSelection(
 \item{output}{\code{TRUE} will output the result table in current working directory}
 }
 \value{
-This function will return the original feature table with an extra column named "Quality" to indicate the feature quality
+This function will return the original feature table with an extra column named "Quality" to indicate the feature quality.
 }
 \description{
 Select high-quality features for quantitative analysis.
