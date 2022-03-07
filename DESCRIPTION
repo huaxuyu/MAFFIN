@@ -1,18 +1,17 @@
 Package: MAFFIN
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
+Title: Metabolomics Intensity Correction and Sample Normalization
+Version: 1.0.0
 Author: Huaxu Yu
-Maintainer: The package maintainer <hxyu@chem.ubc.ca>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: hxyu@chem.ubc.ca
+Description: Select high-quality features. Correct feature intensities. Perform sample normalization.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
 URL: https://github.com/Waddlessss/MAFFIN
 Depends: 
-    R (>= 2.10)
+    R (>= 3.1.0)
 Imports: 
     stringr,
     polynom
