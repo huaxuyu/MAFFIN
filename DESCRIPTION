@@ -3,7 +3,7 @@ Type: Package
 Title: Metabolomics Intensity Correction and Sample Normalization
 Version: 1.0.0
 Author: Huaxu Yu
-Maintainer: hxyu@chem.ubc.ca
+Maintainer: <hxyu@chem.ubc.ca>
 Description: Select high-quality features. Correct feature intensities. Perform sample normalization.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -11,7 +11,7 @@ LazyData: true
 RoxygenNote: 7.1.2
 URL: https://github.com/Waddlessss/MAFFIN
 Depends: 
-    R (>= 3.1.0)
+    R (>= 3.10)
 Imports: 
     stringr,
     polynom
