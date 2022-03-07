@@ -17,7 +17,7 @@
 #' Please see GitHub for demo.
 
 
-MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
+MDFCNorm = function(FeatureTable, IntThreshold=100, SampleInCol=TRUE, output=FALSE,
                     OutputNormFactors=TRUE){
   message("Normalization is running...")
 
@@ -54,23 +54,28 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
   FeatureTable_index = (2:ncol(FeatureTable))[c(temp)]
   group_vector = as.character(FeatureTable[1,FeatureTable_index])
 
-  # Find the reference file with the most detected features
-  f_number = c()
-  for (i in 1:ncol(sample_table)) {
-    f_number[i] = sum(sample_table[,i] > IntThreshold)
-  }
-
-  # Normalization Main
-  # Data matrix for normalized data
-
-  ref_file = as.numeric(sample_table[, which.max(f_number)])
 
   # Only use high-quality features if labeled
   quality_exist = !is.null(FeatureTable$Quality)
   if (quality_exist) {
     hq_table = sample_table[FeatureTable$Quality[-1] == "high", ]
-    ref_file = ref_file[FeatureTable$Quality[-1] == "high"]
+  } else{
+    hq_table = sample_table
   }
+
+
+  # Find the reference file with the most detected features
+  f_number = c()
+  for (i in 1:ncol(hq_table)) {
+    f_number[i] = sum(hq_table[,i] > 0)
+    # f_number[i] = sum(sample_table[,i])
+  }
+
+  # Normalization Main
+  # Data matrix for normalized data
+
+  ref_file = as.numeric(hq_table[, which.max(f_number)])
+
 
   best_bw = bw_opt(hq_table, group_vector)
 
@@ -88,6 +93,7 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
     f[i] = norm_factor
     FeatureTable[-1,FeatureTable_index[i]] = as.numeric(FeatureTable[-1,FeatureTable_index[i]]) / norm_factor
   }
+
 
   if (output) {
     write.csv(FeatureTable, "normalized data table.csv", row.names = F)
