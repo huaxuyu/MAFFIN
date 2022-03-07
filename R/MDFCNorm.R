@@ -17,7 +17,7 @@
 #' Please see GitHub for demo.
 
 
-MDFCNorm = function(FeatureTable, IntThreshold=100, SampleInCol=TRUE, output=FALSE,
+MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
                     OutputNormFactors=TRUE){
   message("Normalization is running...")
 
