@@ -97,7 +97,7 @@ calibrate_intensity = function(s_QC_int, s_QC_conc, model_level, real_intensitie
         calibrated_intensity = c(calibrated_intensity,cali_int)
         next
       }
-      Re_equation = polynomial(c(Re_coeff[1]-real_intensities[int],Re_coeff[2:length(Re_coeff)]))
+      Re_equation = polynom::polynomial(c(Re_coeff[1]-real_intensities[int],Re_coeff[2:length(Re_coeff)]))
       All_solutions = solve(Re_equation)
       All_solutions = Re(All_solutions[which(Im(All_solutions) == 0)])
 
