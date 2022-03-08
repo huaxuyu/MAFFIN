@@ -31,5 +31,5 @@ and a set of normalization factors.
 Maximal density fold change normalization
 }
 \examples{
-Please see GitHub for demo.
+MDFCNormedTable = MDFCNorm(TestingData)
 }

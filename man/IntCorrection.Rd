@@ -36,5 +36,5 @@ This function will return the original feature table with corrected intensities.
 Intensity correction using serial QC samples
 }
 \examples{
-Please see GitHub for demo.
+IntCorrectedTable = IntCorrection(TestingData)
 }

@@ -11,7 +11,9 @@
 #'
 #' @return This function will return the original feature table with corrected intensities.
 #' @export
-#' @examples Please see GitHub for demo.
+#' @examples
+#' IntCorrectedTable = IntCorrection(TestingData)
+
 IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_points=7,
                          SQCcor=0.9, SampleInCol=TRUE, output=FALSE){
 
@@ -130,7 +132,7 @@ IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_poi
   close(pb)
 
   if (output) {
-    write.csv(FeatureTable, "Intensity_correction.csv")
+    write.csv(FeatureTable, "Intensity_correction.csv", row.names = FALSE)
   }
 
   return(FeatureTable)

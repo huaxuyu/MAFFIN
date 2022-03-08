@@ -16,7 +16,9 @@
 #' For group names, please use: \cr
 #' "RT" for retention time column; \cr
 #' "QC" for quality control samples between real samples (normal QC samples); \cr
-#' "blank" for blank samples; \cr
+#' "blank" for blank
+#'
+#' samples; \cr
 #' "SQC_###" for serial QC samples with a certain loading amount.
 #' For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL.
 #' @export
@@ -24,7 +26,7 @@
 #' This function will return the original feature table with an extra column named "Quality" to indicate the feature quality.
 #'
 #' @examples
-#' Please see GitHub for demo.
+#' SelectionTable = FeatureSelection(TestingData)
 
 
 FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
@@ -160,7 +162,7 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   FeatureTable$Quality[-1] = all_filter
 
   if (output) {
-    write.csv(FeatureTable, "Feature_selection.csv")
+    write.csv(FeatureTable, "Feature_selection.csv", row.names = FALSE)
   }
 
   message("High-quality feature selection is done.")

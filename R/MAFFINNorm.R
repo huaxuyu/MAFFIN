@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' Please see GitHub for demo.
+#' MAFFINTable = MAFFINNorm(TestingData)
 
 
 MAFFINNorm = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
@@ -33,7 +33,7 @@ MAFFINNorm = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   f3 = MDFCNorm(FeatureTable=f2, IntThreshold=IntThreshold, SampleInCol=TRUE)
 
   if (output) {
-    write.csv(f3[[1]], "MAFFIN_result.csv")
+    write.csv(f3[[1]], "MAFFIN_result.csv", row.names = FALSE)
   }
 
   return(f3)

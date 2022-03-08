@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' Please see GitHub for demo.
+#' MDFCNormedTable = MDFCNorm(TestingData)
 
 
 MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,

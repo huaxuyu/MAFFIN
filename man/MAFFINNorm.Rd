@@ -46,5 +46,5 @@ and a set of normalization factors.
 MAFFFIN normalization
 }
 \examples{
-Please see GitHub for demo.
+MAFFINTable = MAFFINNorm(TestingData)
 }

@@ -43,10 +43,12 @@ The first row should be sample names, and the second row should be group names.\
 For group names, please use: \cr
 "RT" for retention time column; \cr
 "QC" for quality control samples between real samples (normal QC samples); \cr
-"blank" for blank samples; \cr
+"blank" for blank
+
+samples; \cr
 "SQC_###" for serial QC samples with a certain loading amount.
 For example, SQC_1.0 means a serial QC sample with injection volume as 1.0 uL.
 }
 \examples{
-Please see GitHub for demo.
+SelectionTable = FeatureSelection(TestingData)
 }
