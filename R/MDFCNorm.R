@@ -100,11 +100,14 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
     pRMAD_each1 = c()
     pRMAD_each2 = c()
     for (i in 1:(nrow(FeatureTable)-1)) {
-      if(FeatureTable$Quality[i+1] == "low"){
-        pRMAD_each1[i] = NaN
-        pRMAD_each2[i] = NaN
-        next
+      if (quality_exist) {
+        if(FeatureTable$Quality[i+1] == "low"){
+          pRMAD_each1[i] = NaN
+          pRMAD_each2[i] = NaN
+          next
+        }
       }
+
       d1 = as.numeric(sample_table[i,])
       d2 = as.numeric(FeatureTable[i+1, FeatureTable_index])
       pRMAD_each1[i] = pooled_rMAD(d1, group_vector)
