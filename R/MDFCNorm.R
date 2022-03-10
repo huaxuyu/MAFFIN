@@ -6,6 +6,7 @@
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
 #' @param OutputNormFactors \code{TRUE} will show the normalization factors after normalization
+#' @param RunEvaluation \code{TRUE} will evaluate the normalization results using intragroup variation.
 #'
 #' @return
 #' This function will return a list contains two items: the normalized feature table,
@@ -18,7 +19,7 @@
 
 
 MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
-                    OutputNormFactors=TRUE){
+                    OutputNormFactors=TRUE, RunEvaluation=TRUE){
   message("Normalization is running...")
 
   # Transpose FeatureTable if samples are in row
@@ -68,7 +69,6 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
   f_number = c()
   for (i in 1:ncol(hq_table)) {
     f_number[i] = sum(hq_table[,i] > 0)
-    # f_number[i] = sum(sample_table[,i])
   }
 
   # Normalization Main
@@ -78,8 +78,10 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
 
 
   best_bw = bw_opt(hq_table, group_vector)
+  message(paste0("The bandwidth is optimized to ", best_bw, "."))
 
   f = c()
+
   for (i in 1:ncol(sample_table)) {
     if(i == which.max(f_number)){
       f[i] = 1
@@ -94,6 +96,26 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
     FeatureTable[-1,FeatureTable_index[i]] = as.numeric(FeatureTable[-1,FeatureTable_index[i]]) / norm_factor
   }
 
+  if (RunEvaluation) {
+    pRMAD_each1 = c()
+    pRMAD_each2 = c()
+    for (i in 1:(nrow(FeatureTable)-1)) {
+      if(FeatureTable$Quality[i+1] == "low"){
+        pRMAD_each1[i] = NaN
+        pRMAD_each2[i] = NaN
+        next
+      }
+      d1 = as.numeric(sample_table[i,])
+      d2 = as.numeric(FeatureTable[i+1, FeatureTable_index])
+      pRMAD_each1[i] = pooled_rMAD(d1, group_vector)
+      pRMAD_each2[i] = pooled_rMAD(d2, group_vector)
+    }
+    pRMAD1 = round(median(pRMAD_each1[!is.nan(pRMAD_each1)]), digits = 4)
+    pRMAD2 = round(median(pRMAD_each2[!is.nan(pRMAD_each2)]), digits = 4)
+    message(paste0("Median of PRMAD changed from ",
+                   pRMAD1, " to ", pRMAD2, " after normalization."))
+  }
+
 
   if (output) {
     write.csv(FeatureTable, "normalized data table.csv", row.names = F)
@@ -101,9 +123,12 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
 
   if (OutputNormFactors) {
     message("Normalization factors:")
-    print(f)
+    cat(round(f, digits = 3))
   }
   results = list(FeatureTable, f)
+  if (RunEvaluation) {
+    results = list(FeatureTable, f, pRMAD_each1, pRMAD_each2)
+  }
   return(results)
   message("Normalization is done.")
 }

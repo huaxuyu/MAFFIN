@@ -9,7 +9,8 @@ MDFCNorm(
   IntThreshold = 0,
   SampleInCol = TRUE,
   output = FALSE,
-  OutputNormFactors = TRUE
+  OutputNormFactors = TRUE,
+  RunEvaluation = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ MDFCNorm(
 \item{output}{\code{TRUE} will output the result table in current working directory}
 
 \item{OutputNormFactors}{\code{TRUE} will show the normalization factors after normalization}
+
+\item{RunEvaluation}{\code{TRUE} will evaluate the normalization results using intragroup variation.}
 }
 \value{
 This function will return a list contains two items: the normalized feature table,
