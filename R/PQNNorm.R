@@ -19,7 +19,7 @@
 
 
 PQNNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
-                   OutputNormFactors=TRUE, RunEvaluation=TRUE){
+                   OutputNormFactors=FALSE, RunEvaluation=TRUE){
   message("Normalization is running...")
 
   # Transpose FeatureTable if samples are in row

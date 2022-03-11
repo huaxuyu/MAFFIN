@@ -9,7 +9,7 @@ PQNNorm(
   IntThreshold = 0,
   SampleInCol = TRUE,
   output = FALSE,
-  OutputNormFactors = TRUE,
+  OutputNormFactors = FALSE,
   RunEvaluation = TRUE
 )
 }
