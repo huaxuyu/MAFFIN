@@ -30,7 +30,7 @@ MDFCNorm(
 \item{bwOpt}{\code{NA} will automatically optimize the bandwidth. Use a numeric value to set the bandwidth and skip the optimization.}
 }
 \value{
-This function will return a list contains two items: the normalized feature table,
+This function will return a list that contains two items: the normalized feature table,
 and a set of normalization factors.
 }
 \description{

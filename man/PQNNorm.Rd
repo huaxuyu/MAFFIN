@@ -2,7 +2,7 @@
 % Please edit documentation in R/PQNNorm.R
 \name{PQNNorm}
 \alias{PQNNorm}
-\title{Title}
+\title{Probabilistic quotient normalization.}
 \usage{
 PQNNorm(
   FeatureTable,
@@ -27,11 +27,11 @@ PQNNorm(
 \item{RunEvaluation}{\code{TRUE} will evaluate the normalization results using intragroup variation.}
 }
 \value{
-This function will return a list contains two items: the normalized feature table,
+This function will return a list that contains two items: the normalized feature table,
 and a set of normalization factors.
 }
 \description{
-Title
+Probabilistic quotient normalization.
 }
 \examples{
 PQNNormedTable = PQNNorm(TestingData)

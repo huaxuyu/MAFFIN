@@ -1,5 +1,5 @@
 
-#' Title
+#' Probabilistic quotient normalization.
 #'
 #' @param FeatureTable Feature intensity table with samples in column and features in row (default).
 #' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
@@ -9,7 +9,7 @@
 #' @param RunEvaluation \code{TRUE} will evaluate the normalization results using intragroup variation.
 #'
 #' @return
-#' This function will return a list contains two items: the normalized feature table,
+#' This function will return a list that contains two items: the normalized feature table,
 #' and a set of normalization factors.
 #'
 #' @export

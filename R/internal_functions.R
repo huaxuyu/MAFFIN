@@ -13,6 +13,21 @@ pooled_rMAD = function(data, group_vector) {
   return(prMAD)
 }
 
+
+# Calculate the pooled relative standard deviation
+pooled_rsd = function(data, group_vector) {
+  unique_g = unique(group_vector)
+  psd = 0
+  for (i in 1:length(unique_g)) {
+    d = data[group_vector == unique_g[i]]
+    psd = psd + (length(d)-1)*var(d)
+  }
+  psd = sqrt(psd / (length(group_vector) - length(unique_g)))
+  prsd = psd / mean(data)
+  return(prsd)
+}
+
+
 # Optimize bandwidth
 bw_opt = function(df, group_vector, bw_seq = seq(0.1,10,0.1)) {
   message("Optimizing bandwidth...")
