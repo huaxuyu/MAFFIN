@@ -7,6 +7,7 @@
 #' @param output \code{TRUE} will output the result table in current working directory
 #' @param OutputNormFactors \code{TRUE} will show the normalization factors after normalization
 #' @param RunEvaluation \code{TRUE} will evaluate the normalization results using intragroup variation.
+#' @param bwOpt \code{NA} will automatically optimize the bandwidth. Use a numeric value to set the bandwidth and skip the optimization.
 #'
 #' @return
 #' This function will return a list contains two items: the normalized feature table,
