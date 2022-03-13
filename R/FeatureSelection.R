@@ -38,7 +38,7 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   if (!SampleInCol) {
     FeatureTable = t(FeatureTable)
   }
-  filter.blank = filter.SQC = TRUE
+  filter.blank = filter.SQC = filter.RT = TRUE
 
   # Find names of sample groups
   group_seq = tolower(as.character(FeatureTable[1,-1]))
@@ -104,6 +104,10 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   group_vector = group_seq[!temp]
 
   RT_v = data.matrix(IntTable[, group_seq=="rt"])
+  if (length(RT_v) == 0) {
+    filter.RT = FALSE
+    message("Retention time data are not detected.")
+  }
 
   temp = group_seq=="qc"
   if(sum(temp) != 0){
@@ -133,7 +137,9 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   # Remove the features out of the defined retention time range
   for (i in 1:nrow(IntTable)) {
     # Check retention time
-    if(RT_v[i] < RtRange[1] | RT_v[i] > RtRange[2]) { derep_table[i,3] = 0 }
+    if (filter.RT) {
+      if(RT_v[i] < RtRange[1] | RT_v[i] > RtRange[2]) { derep_table[i,3] = 0 }
+    }
   }
 
   all_filter = rep("low", nrow(IntTable))
