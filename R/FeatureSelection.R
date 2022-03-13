@@ -145,21 +145,23 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   all_filter = rep("low", nrow(IntTable))
 
   # Remove the features with low correlation in SQC samples
-  for (i in 1:nrow(IntTable)) {
-    # Check serial diluted QC linearity
-    QC_int = as.numeric(SQC_table[i,])
-    valid_int = which(QC_int > IntThreshold)
-    QC_int = QC_int[valid_int]
-    selected_QC_conc = QC_conc[valid_int]
-    selected_int_points = length(selected_QC_conc)
+  if (filter.SQC) {
+    for (i in 1:nrow(IntTable)) {
+      # Check serial diluted QC linearity
+      QC_int = as.numeric(SQC_table[i,])
+      valid_int = which(QC_int > IntThreshold)
+      QC_int = QC_int[valid_int]
+      selected_QC_conc = QC_conc[valid_int]
+      selected_int_points = length(selected_QC_conc)
 
-    if(selected_int_points <= 3){
-      derep_table[i,5] = 0
-    } else if(cor(QC_int, selected_QC_conc) < SQCcor){
-      derep_table[i,5] = 0
-    }
-    if (sum(derep_table[i,-1]) == 4) {
-      all_filter[i] = "high"
+      if(selected_int_points <= 3){
+        derep_table[i,5] = 0
+      } else if(cor(QC_int, selected_QC_conc) < SQCcor){
+        derep_table[i,5] = 0
+      }
+      if (sum(derep_table[i,-1]) == 4) {
+        all_filter[i] = "high"
+      }
     }
   }
 
