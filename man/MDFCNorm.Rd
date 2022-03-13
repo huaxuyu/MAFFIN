@@ -10,7 +10,8 @@ MDFCNorm(
   SampleInCol = TRUE,
   output = FALSE,
   OutputNormFactors = FALSE,
-  RunEvaluation = TRUE
+  RunEvaluation = TRUE,
+  bwOpt = NA
 )
 }
 \arguments{

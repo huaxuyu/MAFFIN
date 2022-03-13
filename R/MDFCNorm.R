@@ -19,7 +19,7 @@
 
 
 MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
-                    OutputNormFactors=FALSE, RunEvaluation=TRUE){
+                    OutputNormFactors=FALSE, RunEvaluation=TRUE, bwOpt=NA){
   message("Normalization is running...")
 
   # Transpose FeatureTable if samples are in row
@@ -76,9 +76,14 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
 
   ref_file = as.numeric(hq_table[, which.max(f_number)])
 
+  if (is.na(bwOpt)) {
+    best_bw = bw_opt(hq_table, group_vector)
+    message(paste0("The bandwidth is optimized to ", best_bw, "."))
+  } else {
+    best_bw = bwOpt
+    message(paste0("The bandwidth is set to ", best_bw, "."))
+  }
 
-  best_bw = bw_opt(hq_table, group_vector)
-  message(paste0("The bandwidth is optimized to ", best_bw, "."))
 
   f = c()
 
