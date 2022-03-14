@@ -83,23 +83,35 @@ SumNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
   if (RunEvaluation) {
     pRMAD_each1 = c()
     pRMAD_each2 = c()
+    pRSD_each1 = c()
+    pRSD_each2 = c()
     for (i in 1:(nrow(FeatureTable)-1)) {
       if (quality_exist) {
         if(FeatureTable$Quality[i+1] == "low"){
           pRMAD_each1[i] = NaN
           pRMAD_each2[i] = NaN
+          pRSD_each1[i] = NaN
+          pRSD_each2[i] = NaN
           next
         }
       }
+
       d1 = as.numeric(sample_table[i,])
       d2 = as.numeric(FeatureTable[i+1, FeatureTable_index])
       pRMAD_each1[i] = pooled_rMAD(d1, group_vector)
       pRMAD_each2[i] = pooled_rMAD(d2, group_vector)
+      pRSD_each1[i] = pooled_rsd(d1, group_vector)
+      pRSD_each2[i] = pooled_rsd(d2, group_vector)
     }
     pRMAD1 = round(median(pRMAD_each1[!is.nan(pRMAD_each1)]), digits = 4)
     pRMAD2 = round(median(pRMAD_each2[!is.nan(pRMAD_each2)]), digits = 4)
     message(paste0("Median of PRMAD changed from ",
                    pRMAD1, " to ", pRMAD2, " after normalization."))
+
+    pRSD1 = round(median(pRSD_each1[!is.nan(pRMAD_each1)]), digits = 4)
+    pRSD2 = round(median(pRSD_each2[!is.nan(pRMAD_each2)]), digits = 4)
+    message(paste0("Median of PRMAD changed from ",
+                   pRSD1, " to ", pRSD2, " after normalization."))
   }
 
 
