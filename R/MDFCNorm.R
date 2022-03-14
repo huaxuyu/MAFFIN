@@ -85,7 +85,6 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
     message(paste0("The bandwidth is set to ", best_bw, "."))
   }
 
-
   f = c()
 
   for (i in 1:ncol(sample_table)) {

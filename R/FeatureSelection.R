@@ -68,7 +68,7 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   # Generate a table to store intensities from all blank samples
   blank_table = c()
   temp = group_seq == "blank"
-  if(length(sum(temp)) == 0){
+  if(sum(temp) == 0){
     filter.blank = FALSE
     message("Blank data are not detected.")
   } else {
