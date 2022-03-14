@@ -11,7 +11,6 @@
 #' @return
 #' This function will return a list that contains two items: the normalized feature table,
 #' and a set of normalization factors.
-#' @import preprocessCore
 #' @export
 #'
 #' @examples
