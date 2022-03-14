@@ -14,4 +14,5 @@ Depends:
     R (>= 3.10)
 Imports: 
     polynom,
-    stringr
+    stringr,
+    preprocessCore
