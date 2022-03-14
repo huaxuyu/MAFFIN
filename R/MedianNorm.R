@@ -1,5 +1,5 @@
 
-#' Quantile normalization.
+#' Normalization by median intensity
 #'
 #' @param FeatureTable Feature intensity table with samples in column and features in row (default).
 #' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
@@ -11,13 +11,14 @@
 #' @return
 #' This function will return a list that contains two items: the normalized feature table,
 #' and a set of normalization factors.
+#'
 #' @export
 #'
 #' @examples
-#' QuantileNormedTable = QuantileNorm(TestingData)
+#' MedianNormedTable = MedianNorm(TestingData)
 
 
-QuantileNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
+MedianNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
                    OutputNormFactors=FALSE, RunEvaluation=TRUE){
   message("Normalization is running...")
 
@@ -55,16 +56,30 @@ QuantileNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=F
   group_vector = as.character(FeatureTable[1,FeatureTable_index])
 
 
+  # Only use high-quality features if labeled
+  quality_exist = !is.null(FeatureTable$Quality)
+  if (quality_exist) {
+    hq_table = sample_table[FeatureTable$Quality[-1] == "high", ]
+  } else{
+    hq_table = sample_table
+  }
+
+
+  # Find the normalization factors
+  f = c()
+  for (i in 1:ncol(hq_table)) {
+    f[i] = median(hq_table[,i])
+  }
+
+  f = f/max(f)
+
   # Normalization Main
   # Data matrix for normalized data
 
-  d = as.data.frame(preprocessCore::normalize.quantiles(as.matrix(sample_table)))
-
   for (i in 1:ncol(sample_table)) {
-    FeatureTable[-1,FeatureTable_index[i]] = d[,i]
+    FeatureTable[-1,FeatureTable_index[i]] = as.numeric(FeatureTable[-1,FeatureTable_index[i]]) / f[i]
   }
 
-  quality_exist = !is.null(FeatureTable$Quality)
   if (RunEvaluation) {
     pRMAD_each1 = c()
     pRMAD_each2 = c()
@@ -76,7 +91,6 @@ QuantileNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=F
           next
         }
       }
-
       d1 = as.numeric(sample_table[i,])
       d2 = as.numeric(FeatureTable[i+1, FeatureTable_index])
       pRMAD_each1[i] = pooled_rMAD(d1, group_vector)
@@ -87,6 +101,7 @@ QuantileNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=F
     message(paste0("Median of PRMAD changed from ",
                    pRMAD1, " to ", pRMAD2, " after normalization."))
   }
+
 
   if (output) {
     write.csv(FeatureTable, "normalized data table.csv", row.names = F)
@@ -103,4 +118,3 @@ QuantileNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=F
   return(results)
   message("Normalization is done.")
 }
-
