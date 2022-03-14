@@ -116,12 +116,12 @@ PQNNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
     }
     pRMAD1 = round(median(pRMAD_each1[!is.nan(pRMAD_each1)]), digits = 4)
     pRMAD2 = round(median(pRMAD_each2[!is.nan(pRMAD_each2)]), digits = 4)
-    message(paste0("Median of PRMAD changed from ",
+    message(paste0("The median of PRMAD changed from ",
                    pRMAD1, " to ", pRMAD2, " after normalization."))
 
     pRSD1 = round(median(pRSD_each1[!is.nan(pRMAD_each1)]), digits = 4)
     pRSD2 = round(median(pRSD_each2[!is.nan(pRMAD_each2)]), digits = 4)
-    message(paste0("Median of PRMAD changed from ",
+    message(paste0("The median of PRSD changed from ",
                    pRSD1, " to ", pRSD2, " after normalization."))
   }
 
