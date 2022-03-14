@@ -94,11 +94,11 @@ QuantileNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=F
 
   if (OutputNormFactors) {
     message("Normalization factors:")
-    cat(round(f, digits = 3))
+    cat("Normalization factor is not available for this method.")
   }
-  results = list(FeatureTable, f)
+  results = list(FeatureTable, NA)
   if (RunEvaluation) {
-    results = list(FeatureTable, f, pRMAD_each1, pRMAD_each2)
+    results = list(FeatureTable, NA, pRMAD_each1, pRMAD_each2)
   }
   return(results)
   message("Normalization is done.")
