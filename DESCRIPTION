@@ -1,6 +1,6 @@
 Package: MAFFIN
 Type: Package
-Title: Integrated Sample Normalization by MAFFIN algorithm
+Title: Integrated Sample Normalization by MAFFIN Algorithm
 Version: 1.0.0
 Author: Huaxu Yu
 Maintainer: <hxyu@chem.ubc.ca>
