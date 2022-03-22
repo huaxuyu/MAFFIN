@@ -4,13 +4,13 @@
 #' Select high-quality features for quantitative analysis.
 #'
 #' @param FeatureTable Data frame with features in row and samples in column (default).
-#' @param BlankFilter High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}
-#' @param RtRange Range of the defined retention time window, in minute.
-#' @param QCRSD Relative standard deviation threshold for QC samples.
-#' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
+#' @param BlankFilter A numeric value. High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}
+#' @param RtRange A numeric vector indicating the range of the defined retention time window, in minute.
+#' @param QCRSD A numeric value indicating the relative standard deviation threshold for QC samples.
+#' @param SQCcor A numeric value indicating the Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
-#' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
+#' @param IntThreshold A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.
 #'
 #' @details
 #' \code{FeatureTable} contains measured signal intensities of metabolic features,

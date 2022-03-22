@@ -7,7 +7,7 @@
 EvaPRSD(FeatureTable, GroupNames, SampleInCol = TRUE, output = FALSE)
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with features in row and samples in column (default).}
+\item{FeatureTable}{Data frame with features in row and samples in column (default).}
 
 \item{GroupNames}{A character vector indicating the names of each group.}
 

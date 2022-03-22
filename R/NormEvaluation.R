@@ -1,12 +1,12 @@
 
 #' Calculate pooled RMAD for normalization evaluation.
 #'
-#' #' @description
+#' @description
 #' Calculate pooled relative median absolute deviation for each metabolic feature.
 #'
-#' @param FeatureTable Feature intensity table with features in row and samples in column (default).
+#' @param FeatureTable Data frame with features in row and samples in column (default).
 #' @param GroupNames A character vector indicating the names of each group.
-#' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
+#' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
 #'
 #' @details
@@ -69,7 +69,7 @@ EvaPRMAD = function(FeatureTable, GroupNames, SampleInCol=TRUE, output=FALSE){
 #' @description
 #' Calculate pooled relative standard deviation for each metabolic feature.
 #'
-#' @param FeatureTable Feature intensity table with features in row and samples in column (default).
+#' @param FeatureTable Data frame with features in row and samples in column (default).
 #' @param GroupNames A character vector indicating the names of each group.
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory

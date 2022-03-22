@@ -5,9 +5,9 @@
 #' Correct MS signal intensities using serial QC samples
 #'
 #' @param FeatureTable Data frame with features in row and samples in column (default).
-#' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
-#' @param LR_QC_points Required data points for quadratic regression (>= this value).
-#' @param QR_QC_points Required data points for cubic regression (>= this value).
+#' @param IntThreshold A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.
+#' @param LR_QC_points Minimum serial QC data points for quadratic regression.
+#' @param QR_QC_points Minimum serial QC data points for cubic regression.
 #' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory.

@@ -7,11 +7,11 @@
 EvaPRMAD(FeatureTable, GroupNames, SampleInCol = TRUE, output = FALSE)
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with features in row and samples in column (default).}
+\item{FeatureTable}{Data frame with features in row and samples in column (default).}
 
 \item{GroupNames}{A character vector indicating the names of each group.}
 
-\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
+\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory}
 }
@@ -19,7 +19,6 @@ EvaPRMAD(FeatureTable, GroupNames, SampleInCol = TRUE, output = FALSE)
 This function will return a vector that contains the calculated PRMADs for all features.
 }
 \description{
-#' @description
 Calculate pooled relative median absolute deviation for each metabolic feature.
 }
 \details{

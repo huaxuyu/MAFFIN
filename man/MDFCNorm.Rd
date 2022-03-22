@@ -15,15 +15,15 @@ MDFCNorm(
 )
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with features in row and samples in column (default).}
+\item{FeatureTable}{Data frame with features in row and samples in column (default).}
 
-\item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
+\item{IntThreshold}{A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
 \item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory}
 
-\item{OutputNormFactors}{\code{TRUE} will show the normalization factors after normalization}
+\item{OutputNormFactors}{\code{TRUE} will print the normalization factors after normalization}
 
 \item{RunEvaluation}{\code{TRUE} will evaluate the normalization results by intragroup variation.}
 
@@ -33,7 +33,7 @@ MDFCNorm(
 This function will return a list that contains four items if \code{RunEvaluation = TRUE}:
 the normalized feature table, normalization factors, PRMAD of original data,
 and PRMAD of normalized data. The last two items will not be generated if
-\code{RunEvaluation = TRUE}
+\code{RunEvaluation = FALSE}
 }
 \description{
 Sample normalization using maximal density fold change.

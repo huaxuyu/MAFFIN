@@ -18,15 +18,15 @@ FeatureSelection(
 \arguments{
 \item{FeatureTable}{Data frame with features in row and samples in column (default).}
 
-\item{BlankFilter}{High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}}
+\item{BlankFilter}{A numeric value. High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}}
 
-\item{RtRange}{Range of the defined retention time window, in minute.}
+\item{RtRange}{A numeric vector indicating the range of the defined retention time window, in minute.}
 
-\item{QCRSD}{Relative standard deviation threshold for QC samples.}
+\item{QCRSD}{A numeric value indicating the relative standard deviation threshold for QC samples.}
 
-\item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).}
+\item{SQCcor}{A numeric value indicating the Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).}
 
-\item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
+\item{IntThreshold}{A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
 \item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 

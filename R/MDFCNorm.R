@@ -4,11 +4,11 @@
 #' @description
 #' Sample normalization using maximal density fold change.
 #'
-#' @param FeatureTable Feature intensity table with features in row and samples in column (default).
-#' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
+#' @param FeatureTable Data frame with features in row and samples in column (default).
+#' @param IntThreshold A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
-#' @param OutputNormFactors \code{TRUE} will show the normalization factors after normalization
+#' @param OutputNormFactors \code{TRUE} will print the normalization factors after normalization
 #' @param RunEvaluation \code{TRUE} will evaluate the normalization results by intragroup variation.
 #' @param bwOpt \code{NA} will automatically optimize the bandwidth. Use a numeric value to set the bandwidth and skip the optimization.
 #'
@@ -29,7 +29,7 @@
 #' This function will return a list that contains four items if \code{RunEvaluation = TRUE}:
 #' the normalized feature table, normalization factors, PRMAD of original data,
 #' and PRMAD of normalized data. The last two items will not be generated if
-#' \code{RunEvaluation = TRUE}
+#' \code{RunEvaluation = FALSE}
 #'
 #' @export
 #'

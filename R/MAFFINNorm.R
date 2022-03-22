@@ -6,14 +6,14 @@
 #' of three modules: high-quality feature selection, MS signal intensity correction,
 #' and maximal density fold change normalization.
 #'
-#' @param FeatureTable Feature intensity table with features in row and samples in column (default).
-#' @param BlankFilter High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}.
-#' @param RtRange Range of the defined retention time window, in minute.
-#' @param QCRSD Relative standard deviation threshold for QC samples.
-#' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
-#' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
-#' @param LR_QC_points Required data points for quadratic regression (>= this value)
-#' @param QR_QC_points Required data points for cubic regression (>= this value)
+#' @param FeatureTable Data frame with features in row and samples in column (default).
+#' @param BlankFilter A numeric value. High-quality when mean(sample intensities) > mean(blank intensities) * \code{BlankFilter}.
+#' @param RtRange A numeric vector indicating the range of the defined retention time window, in minute.
+#' @param QCRSD A numeric value indicating the relative standard deviation threshold for QC samples.
+#' @param SQCcor A numeric value indicating the Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
+#' @param IntThreshold A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.
+#' @param LR_QC_points Minimum serial QC data points for quadratic regression.
+#' @param QR_QC_points Minimum serial QC data points for cubic regression.
 #' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory.
 #'
@@ -34,7 +34,7 @@
 #' This function will return a list that contains four items if \code{RunEvaluation = TRUE}:
 #' the normalized feature table, normalization factors, PRMAD of original data,
 #' and PRMAD of normalized data. The last two items will not be generated if
-#' \code{RunEvaluation = TRUE}
+#' \code{RunEvaluation = FALSE}
 #'
 #' @export
 #'

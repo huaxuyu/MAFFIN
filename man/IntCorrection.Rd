@@ -17,11 +17,11 @@ IntCorrection(
 \arguments{
 \item{FeatureTable}{Data frame with features in row and samples in column (default).}
 
-\item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
+\item{IntThreshold}{A numeric value indicating the feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
-\item{LR_QC_points}{Required data points for quadratic regression (>= this value).}
+\item{LR_QC_points}{Minimum serial QC data points for quadratic regression.}
 
-\item{QR_QC_points}{Required data points for cubic regression (>= this value).}
+\item{QR_QC_points}{Minimum serial QC data points for cubic regression.}
 
 \item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).}
 
