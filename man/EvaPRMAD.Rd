@@ -2,12 +2,12 @@
 % Please edit documentation in R/NormEvaluation.R
 \name{EvaPRMAD}
 \alias{EvaPRMAD}
-\title{Calculate the pooled RMAD for normalization evaluation.}
+\title{Calculate pooled RMAD for normalization evaluation.}
 \usage{
 EvaPRMAD(FeatureTable, GroupNames, SampleInCol = TRUE, output = FALSE)
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with samples in column and features in row (default).}
+\item{FeatureTable}{Feature intensity table with features in row and samples in column (default).}
 
 \item{GroupNames}{A character vector indicating the names of each group.}
 
@@ -16,11 +16,24 @@ EvaPRMAD(FeatureTable, GroupNames, SampleInCol = TRUE, output = FALSE)
 \item{output}{\code{TRUE} will output the result table in current working directory}
 }
 \value{
-This function will return a vector that contains the calculated PRMAD for each feature.
+This function will return a vector that contains the calculated PRMADs for all features.
 }
 \description{
-Calculate the pooled RMAD for normalization evaluation.
+#' @description
+Calculate pooled relative median absolute deviation for each metabolic feature.
+}
+\details{
+\code{FeatureTable} contains measured signal intensities of metabolic features,
+with features in row and samples in column (default). The column names should
+be sample names, and the first row should be sample group names (e.g. control, case).\cr
+The first column should be unique feature identifiers.
+An example of \code{FeatureTable} is provided as \code{TestingData} in this package.
 }
 \examples{
-vecPRMAD = EvaPRMAD(TestingData, GroupNames=c("HY", "SX", "SW", "YC"))
+prmad = EvaPRMAD(TestingData, GroupNames=c("HY", "SX", "SW", "YC"))
+}
+\references{
+Yu, Huaxu, and Tao Huan. "MAFFIN: Metabolomics Sample Normalization
+Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected
+Signal Intensities." \emph{bioRxiv} (2021).
 }

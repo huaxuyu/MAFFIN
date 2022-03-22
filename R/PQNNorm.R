@@ -1,18 +1,38 @@
 
 #' Probabilistic quotient normalization.
 #'
-#' @param FeatureTable Feature intensity table with samples in column and features in row (default).
+#' @description
+#' Sample normalization using median fold change.
+#'
+#' @param FeatureTable Feature intensity table with features in row and samples in column (default).
 #' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
-#' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
+#' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
 #' @param OutputNormFactors \code{TRUE} will show the normalization factors after normalization
 #' @param RunEvaluation \code{TRUE} will evaluate the normalization results using intragroup variation.
 #'
+#' @details
+#' \code{FeatureTable} contains measured or corrected signal intensities of metabolic features,
+#' with features in row and samples in column (default). The column names should
+#' be sample names, and the first row should be sample group names (e.g. control, case).\cr
+#' The first column should be unique feature identifiers.
+#' For group names, please do not use "blank", "RT", "QC", or "SQC_###" for real biological samples. \cr
+#' An example of \code{FeatureTable} is provided as \code{TestingData} in this package.
+#'
 #' @return
-#' This function will return a list that contains two items: the normalized feature table,
-#' and a set of normalization factors.
+#' This function will return a list that contains four items if \code{RunEvaluation = TRUE}:
+#' the normalized feature table, normalization factors, PRMAD of original data,
+#' and PRMAD of normalized data. The last two items will not be generated if
+#' \code{RunEvaluation = TRUE}
 #'
 #' @export
+#'
+#' @references Yu, Huaxu, and Tao Huan. "MAFFIN: Metabolomics Sample Normalization
+#' Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected
+#' Signal Intensities." \emph{bioRxiv} (2021). \cr
+#' Dieterle, Frank, et al. "Probabilistic quotient normalization as robust method to account
+#' for dilution of complex biological mixtures. Application in 1H NMR metabonomics."
+#' \emph{Analytical chemistry} 78.13 (2006): 4281-4290.
 #'
 #' @examples
 #' PQNNormedTable = PQNNorm(TestingData)
@@ -135,8 +155,10 @@ PQNNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE,
     cat(round(f, digits = 3))
   }
   results = list(FeatureTable, f)
+  names(results) = c("NormedTable", "NormFactor")
   if (RunEvaluation) {
     results = list(FeatureTable, f, pRMAD_each1, pRMAD_each2)
+    names(results) = c("NormedTable", "NormFactor", "OriPRMAD", "NormedPRMAD")
   }
   return(results)
   message("Normalization is done.")

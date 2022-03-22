@@ -15,7 +15,7 @@ IntCorrection(
 )
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with samples in column and features in row (default).}
+\item{FeatureTable}{Data frame with features in row and samples in column (default).}
 
 \item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
@@ -25,7 +25,7 @@ IntCorrection(
 
 \item{SQCcor}{Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).}
 
-\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
+\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory.}
 }
@@ -33,8 +33,25 @@ IntCorrection(
 This function will return the original feature table with corrected intensities.
 }
 \description{
-Intensity correction using serial QC samples
+Correct MS signal intensities using serial QC samples
+}
+\details{
+\code{FeatureTable} contains measured signal intensities of metabolic features,
+with features in row and samples in column (default). The column names should
+be sample names, and the first row should be sample group names (e.g. control, case).\cr
+The first column should be unique feature identifiers.
+For group names, please use: \cr
+"QC" for quality control samples between real samples (normal QC samples); \cr
+"SQC_###" for serial QC samples with a certain loading amount.
+For example, SQC_1.0 means a serial QC sample with injection volume of 1.0 uL. \cr
+Please note, group names of real biological samples cannot be "RT" and "blank". \cr
+An example of \code{FeatureTable} is provided as \code{TestingData} in this package.
 }
 \examples{
-IntCorrectedTable = IntCorrection(TestingData)
+intCorrectedTable = IntCorrection(TestingData)
+}
+\references{
+Yu, Huaxu, and Tao Huan. "MAFFIN: Metabolomics Sample Normalization
+Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected
+Signal Intensities." \emph{bioRxiv} (2021).
 }

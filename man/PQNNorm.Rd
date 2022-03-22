@@ -14,11 +14,11 @@ PQNNorm(
 )
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with samples in column and features in row (default).}
+\item{FeatureTable}{Feature intensity table with features in row and samples in column (default).}
 
 \item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
-\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
+\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory}
 
@@ -27,12 +27,30 @@ PQNNorm(
 \item{RunEvaluation}{\code{TRUE} will evaluate the normalization results using intragroup variation.}
 }
 \value{
-This function will return a list that contains two items: the normalized feature table,
-and a set of normalization factors.
+This function will return a list that contains four items if \code{RunEvaluation = TRUE}:
+the normalized feature table, normalization factors, PRMAD of original data,
+and PRMAD of normalized data. The last two items will not be generated if
+\code{RunEvaluation = TRUE}
 }
 \description{
-Probabilistic quotient normalization.
+Sample normalization using median fold change.
+}
+\details{
+\code{FeatureTable} contains measured or corrected signal intensities of metabolic features,
+with features in row and samples in column (default). The column names should
+be sample names, and the first row should be sample group names (e.g. control, case).\cr
+The first column should be unique feature identifiers.
+For group names, please do not use "blank", "RT", "QC", or "SQC_###" for real biological samples. \cr
+An example of \code{FeatureTable} is provided as \code{TestingData} in this package.
 }
 \examples{
 PQNNormedTable = PQNNorm(TestingData)
+}
+\references{
+Yu, Huaxu, and Tao Huan. "MAFFIN: Metabolomics Sample Normalization
+Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected
+Signal Intensities." \emph{bioRxiv} (2021). \cr
+Dieterle, Frank, et al. "Probabilistic quotient normalization as robust method to account
+for dilution of complex biological mixtures. Application in 1H NMR metabonomics."
+\emph{Analytical chemistry} 78.13 (2006): 4281-4290.
 }

@@ -2,25 +2,37 @@
 % Please edit documentation in R/NormEvaluation.R
 \name{EvaPRSD}
 \alias{EvaPRSD}
-\title{Calculate the pooled RSD for normalization evaluation.}
+\title{Calculate pooled RSD for normalization evaluation.}
 \usage{
 EvaPRSD(FeatureTable, GroupNames, SampleInCol = TRUE, output = FALSE)
 }
 \arguments{
-\item{FeatureTable}{Feature intensity table with samples in column and features in row (default).}
+\item{FeatureTable}{Feature intensity table with features in row and samples in column (default).}
 
 \item{GroupNames}{A character vector indicating the names of each group.}
 
-\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
+\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory}
 }
 \value{
-This function will return a vector that contains the calculated PRSD for each feature.
+This function will return a vector that contains the calculated PRSDs for all features.
 }
 \description{
-Calculate the pooled RSD for normalization evaluation.
+Calculate pooled relative standard deviation for each metabolic feature.
+}
+\details{
+\code{FeatureTable} contains measured signal intensities of metabolic features,
+with features in row and samples in column (default). The column names should
+be sample names, and the first row should be sample group names (e.g. control, case).\cr
+The first column should be unique feature identifiers.
+An example of \code{FeatureTable} is provided as \code{TestingData} in this package.
 }
 \examples{
-vecPRSD = EvaPRSD(TestingData, GroupNames=c("HY", "SX", "SW", "YC"))
+prsd = EvaPRMAD(TestingData, GroupNames=c("HY", "SX", "SW", "YC"))
+}
+\references{
+Yu, Huaxu, and Tao Huan. "MAFFIN: Metabolomics Sample Normalization
+Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected
+Signal Intensities." \emph{bioRxiv} (2021).
 }

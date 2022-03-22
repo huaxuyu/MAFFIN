@@ -28,7 +28,7 @@ FeatureSelection(
 
 \item{IntThreshold}{Feature intensity threshold. Feature is detected when its intensity larger than this value.}
 
-\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FLASE} if samples are in row.}
+\item{SampleInCol}{\code{TRUE} if samples are in column. \code{FALSE} if samples are in row.}
 
 \item{output}{\code{TRUE} will output the result table in current working directory}
 }

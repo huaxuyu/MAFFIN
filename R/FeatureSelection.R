@@ -8,7 +8,7 @@
 #' @param RtRange Range of the defined retention time window, in minute.
 #' @param QCRSD Relative standard deviation threshold for QC samples.
 #' @param SQCcor Pearson's correlation threshold for serial QC samples (recommend: 0.8-0.9).
-#' @param SampleInCol \code{TRUE} if samples are in column. \code{FLASE} if samples are in row.
+#' @param SampleInCol \code{TRUE} if samples are in column. \code{FALSE} if samples are in row.
 #' @param output \code{TRUE} will output the result table in current working directory
 #' @param IntThreshold Feature intensity threshold. Feature is detected when its intensity larger than this value.
 #'
