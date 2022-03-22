@@ -19,4 +19,27 @@ devtools::install_github("Waddlessss/MAFFIN")
 
 ## Usage
 
-MAFFIN takes feature intensity table (dataframe) as input with features in row and samples in column by default. Specifically, the column names are recognized as sample names, and the first row is recognized as sample group names. 
+MAFFIN takes feature intensity table (dataframe) as input, with features in row and samples in column by default. 
+
+Specifically, the column names are sample names. The first row includes sample group names. The input feature intensity table can be prepared in Excel and read into R using
+
+```
+# Read the input feature intensity table.
+inputTable = read.csv(filename)
+```
+
+Your input data table should be similar to this:
+
+<img src='man/figures/ExampleDataTable.PNG' align="left" height="200"/></a>
+
+
+An example input data table can also be viewed in R:
+```
+# View the example input data table
+View(TestingData)
+```
+
+
+
+
+
