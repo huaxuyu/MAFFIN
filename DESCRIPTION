@@ -1,10 +1,10 @@
 Package: MAFFIN
 Type: Package
-Title: Metabolomics Intensity Correction and Sample Normalization
+Title: Integrated Sample Normalization by MAFFIN algorithm
 Version: 1.0.0
 Author: Huaxu Yu
 Maintainer: <hxyu@chem.ubc.ca>
-Description: Select high-quality features. Correct feature intensities. Perform sample normalization.
+Description: MAFFIN sample normalization and evaluation functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
