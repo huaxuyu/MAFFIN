@@ -35,7 +35,7 @@ View(TestingData)
 
 In the first row, you need to label samples by their group names. In particular,
 - use **blank** for blank samples
-- use **RT** for blank samples
+- use **RT** for retention time
 - use **QC** for normal QC samples
 - use **SQC_###** for serial QC samples, where **"###"** means their relative loading amounts. For example, "SQC_1", "SQC_2" and "SQC_3" mean serial QC samples with loading amounts of 1, 2 and 3 uL, respectively.
 
