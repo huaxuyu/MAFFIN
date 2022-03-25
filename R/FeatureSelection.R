@@ -44,11 +44,11 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   if (!SampleInCol) {
     FeatureTable = t(FeatureTable)
   }
-  filter.blank = filter.SQC = filter.RT = TRUE
+  filter.blank = filter.RT = filter.QC = filter.SQC = TRUE
 
   # Find names of sample groups
   group_seq = tolower(as.character(FeatureTable[1,-1]))
-  group_unique = unique(group_seq[-1])
+  group_unique = unique(group_seq)
 
   # Convert feature intensities to numeric values
   # Remove the first row and column for downstream processing
@@ -67,23 +67,49 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   # column 3: retention time filter result
   # column 4: RSD in QC sample filter result
   # column 5: QC linearity filter result
-  derep_table = data.frame(matrix(data = 1, nrow = nrow(IntTable), ncol = 5))
+  derep_table = data.frame(matrix(data = TRUE, nrow = nrow(IntTable), ncol = 5))
   colnames(derep_table) = c("Identifier", "MB", "RT", "QC_RSD", "Pearson_cor")
   derep_table[,1] = FeatureTable[-1,1]
 
-  # Generate a table to store intensities from all blank samples
-  blank_table = c()
-  temp = group_seq == "blank"
+  # Calculate the average intensity from all blank samples
+  blank_v = c()
+  temp = group_seq=="blank"
   if(sum(temp) == 0){
     filter.blank = FALSE
     message("Blank data are not detected.")
   } else {
-    blank_table = data.matrix(IntTable[, temp])
-    if (length(sum(temp)) > 1) {
-      blank_table = apply(blank_table, 1, mean)
+    blank_v = rowMeans(data.matrix(IntTable[, temp]))
+  }
+
+  # Find the column of retention times
+  RT_v = c()
+  temp = group_seq=="rt"
+  if (sum(temp) == 0) {
+    filter.RT = FALSE
+    message("Retention time data are not detected.")
+  } else {
+    RT_v = data.matrix(IntTable[, temp])
+  }
+
+  # Calculate the relative standard deviation from normal QC samples
+  QC_RSD_v = c()
+  temp = group_seq=="qc"
+  if(sum(temp) == 0){
+    filter.QC = FALSE
+    message("QC data are not detected.")
+  } else if (sum(temp) < 3) {
+    filter.QC = FALSE
+    message("QC data are not enough to calculate RSD (3 is required).")
+  } else {
+    for (i in 1:nrow(IntTable)) {
+      QC_RSD_v[i] = sd(IntTable[i, temp]) / mean(IntTable[i, temp])
+      if (is.na(QC_RSD_v[i])) {
+        QC_RSD_v[i] = 0
+      }
     }
   }
 
+  # Find intensities for serial QC samples
   SQC_index = grep("SQC", group_unique, ignore.case = T)
   if(length(SQC_index) == 0){
     filter.SQC = FALSE
@@ -94,61 +120,35 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   } else{
     SQC_table = data.frame(matrix(nrow = nrow(IntTable), ncol = length(SQC_index)))
     colnames(SQC_table) = group_unique[SQC_index]
-    for (i in 1:length(SQC_index)) {
-      SQC_table[,i] = apply(data.matrix(IntTable[,group_unique[SQC_index[i]] == group_seq]), 1, mean)
-    }
     QC_conc = c()
     SQC.list = stringr::str_split(colnames(SQC_table), pattern = "_")
     for (i in 1:ncol(SQC_table)) {
       QC_conc[i] = as.numeric(SQC.list[[i]][2])
     }
+    for (i in 1:length(SQC_index)) {
+      SQC_table[,i] = rowMeans(data.frame(IntTable[,group_seq == group_unique[SQC_index[i]]]))
+
+    }
   }
 
+  # Calculate the average intensity from real samples
   temp = group_seq=="qc" | grepl("SQC", group_seq,ignore.case = T) | group_seq=="blank" | group_seq=="rt"
-  sample_table = data.matrix(IntTable[, !temp])
+  sample_v = rowMeans(data.matrix(IntTable[, !temp]))
 
-  group_vector = group_seq[!temp]
-
-  RT_v = data.matrix(IntTable[, group_seq=="rt"])
-  if (length(RT_v) == 0) {
-    filter.RT = FALSE
-    message("Retention time data are not detected.")
+  # Remove the features in blank
+  if (filter.blank) {
+    derep_table[,2] = sample_v > blank_v*BlankFilter
   }
-
-  temp = group_seq=="qc"
-  if(sum(temp) != 0){
-    MQC_table = data.matrix(IntTable[, temp])
-    if(filter.blank){
-      for (i in 1:nrow(IntTable)) {
-        if(mean(sample_table[i,]) < blank_table[i]*BlankFilter) { derep_table[i,2] = 0 }
-      }
-    }
-    if(sum(temp) >= 3){
-      for (i in 1:nrow(IntTable)) {
-        if(mean(MQC_table[i,] == 0)){
-          derep_table[i,4] = 0
-        } else {
-          if(sd(MQC_table[i,])/mean(MQC_table[i,]) > QCRSD){
-            derep_table[i,4] = 0}
-        }
-      }
-    } else {
-      message("QC data are not enough to calculate RSD (3 is required).")
-    }
-  } else {
-    message("QC data (normal QC) are not detected.")
-  }
-
 
   # Remove the features out of the defined retention time range
-  for (i in 1:nrow(IntTable)) {
-    # Check retention time
-    if (filter.RT) {
-      if(RT_v[i] < RtRange[1] | RT_v[i] > RtRange[2]) { derep_table[i,3] = 0 }
-    }
+  if (filter.RT) {
+    derep_table[,3] = RT_v > RtRange[1] & RT_v < RtRange[2]
   }
 
-  all_filter = rep("low", nrow(IntTable))
+  # Remove the features with low RSD in QC samples
+  if (filter.QC) {
+    derep_table[,4] = QC_RSD_v < QCRSD
+  }
 
   # Remove the features with low correlation in SQC samples
   if (filter.SQC) {
@@ -160,26 +160,36 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
       selected_QC_conc = QC_conc[valid_int]
       selected_int_points = length(selected_QC_conc)
 
-      if(selected_int_points <= 3){
-        derep_table[i,5] = 0
-      } else if(cor(QC_int, selected_QC_conc) < SQCcor){
-        derep_table[i,5] = 0
-      }
-      if (sum(derep_table[i,-1]) == 4) {
-        all_filter[i] = "high"
+      if(selected_int_points > 3){
+        if (cor(QC_int, selected_QC_conc) > SQCcor) {
+          derep_table[i,5] = TRUE
+        } else {
+          derep_table[i,5] = FALSE
+        }
+      } else {
+        derep_table[i,5] = FALSE
       }
     }
   }
 
   FeatureTable$Quality = ""
   FeatureTable$Quality[1] = "FeatureQuality"
-  FeatureTable$Quality[-1] = all_filter
+  reasons = c("Blank", "RT", "LowRSD", "LowCor")
+
+  for (i in 1:nrow(derep_table)) {
+    if (sum(derep_table[i,-1]) == 4) {
+      FeatureTable$Quality[i+1] = "high-quality"
+    } else {
+      temp = paste(reasons[!derep_table[i,-1]], collapse=", ")
+      FeatureTable$Quality[i+1] = paste("low-quality | ", temp)
+    }
+  }
 
   if (output) {
     write.csv(FeatureTable, "Feature_selection.csv", row.names = FALSE)
   }
 
   message("High-quality feature selection is done.")
-  message(paste0(sum(all_filter=="high"), " features are selected from ", nrow(IntTable), "."))
+  message(paste0(sum(FeatureTable$Quality[-1]=="high-quality"), " features are selected from ", nrow(IntTable), "."))
   return(FeatureTable)
 }
