@@ -37,7 +37,7 @@
 IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_points=7,
                          SQCcor=0.9, SampleInCol=TRUE, output=FALSE){
 
-  message("MRC is running...")
+  message("MS intensity correction is running...")
 
   model_pool = c("Uncali.","Linear", "Quadratic", "Cubic")
 

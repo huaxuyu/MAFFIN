@@ -178,10 +178,10 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
 
   for (i in 1:nrow(derep_table)) {
     if (sum(derep_table[i,-1]) == 4) {
-      FeatureTable$Quality[i+1] = "high-quality"
+      FeatureTable$Quality[i+1] = "high"
     } else {
       temp = paste(reasons[!derep_table[i,-1]], collapse=", ")
-      FeatureTable$Quality[i+1] = paste("low-quality | ", temp)
+      FeatureTable$Quality[i+1] = paste("low | ", temp)
     }
   }
 
@@ -190,6 +190,6 @@ FeatureSelection = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
   }
 
   message("High-quality feature selection is done.")
-  message(paste0(sum(FeatureTable$Quality[-1]=="high-quality"), " features are selected from ", nrow(IntTable), "."))
+  message(paste0(sum(FeatureTable$Quality[-1]=="high"), " features are selected from ", nrow(IntTable), "."))
   return(FeatureTable)
 }
