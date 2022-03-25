@@ -147,7 +147,7 @@ IntCorrection = function(FeatureTable, IntThreshold=0, LR_QC_points=5, QR_QC_poi
     }
 
   }
-  FeatureTable$model = c("Model", model)
+  FeatureTable$Model = c("Model", model)
   FeatureTable$SQC_points = c("SQC_points", SQCpoint)
   close(pb)
 
