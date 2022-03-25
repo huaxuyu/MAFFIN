@@ -56,6 +56,24 @@ inputTable = read.csv(filename)
 MAFFINTable = MAFFINNorm(inputTable)
 ```
 
+### Output
+The function `MAFFINNorm` returns a list contains 4 items.
+- `NormedTable` is the normzalized feature intensity table (data frame) with extra columns of the data processing results.
+- `NormFactor` is a named vector of calculated normalization factors. Normalization factor reflects the relative concentrations of biological samples.
+- `OriPRMAD` is a vector of PRMADs from original data before normalization (but after MS intensity correction).
+- `NormedPRMAD` is a vector of PRMADs from normalized data.
+
+In particular, three columns are added in `NormedTable` compared to the input.
+- `Quality` labels the feature quality. For low-quality features, MAFFIN elaborates the reasons including Blank, RT, LowRSD, and LowCor corresponding to four feature selection criteria.
+- `Model` indicates the regression model for MS intensity correction.
+- `SQC_points` indicates the number of detected serial QC data that were used in MS intensity correction.
+
+More descriptions are provided in R.
+```
+# Find more descriptions of MAFFIN output
+?MAFFINNorm()
+```
+
 ### Other normalization functions
 ```
 # Sum normalization
