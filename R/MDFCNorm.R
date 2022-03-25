@@ -122,6 +122,7 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
     f[i] = norm_factor
     FeatureTable[-1,FeatureTable_index[i]] = as.numeric(FeatureTable[-1,FeatureTable_index[i]]) / norm_factor
   }
+  names(f) = colnames(sample_table)
 
   if (RunEvaluation) {
     pRMAD_each1 = c()
