@@ -49,9 +49,11 @@
 MAFFINNorm = function(FeatureTable, BlankFilter=2, RtRange=c(0,100),
                       QCRSD=0.25, SQCcor=0.9, IntThreshold=0, LR_QC_points=5,
                       QR_QC_points=7, SampleInCol=TRUE, output=FALSE){
+
   f1 = FeatureSelection(FeatureTable=FeatureTable, BlankFilter=BlankFilter, RtRange=RtRange,
                         QCRSD=QCRSD, SQCcor=SQCcor, IntThreshold=IntThreshold,
                         SampleInCol=SampleInCol)
+
   f2 = IntCorrection(FeatureTable=f1, IntThreshold=IntThreshold, LR_QC_points=LR_QC_points,
                      QR_QC_points=QR_QC_points, SQCcor=SQCcor, SampleInCol=SampleInCol)
 
