@@ -4,6 +4,8 @@
 
 MAFFIN is an integrated R package for metabolomics sample normalization. MAFFIN main algorithm consists of three modules, **high-quality feature selection, MS signal intensity correction, and maximal density fold change normalization**. This package also implements commonly used normalization methods and normalization evaluation functions.
 
+<img src='man/figures/PkgStructure.PNG' align="mid" height="200"/>  
+
 ## Installation
 
 **Check if R package "devtools" is installed.**
