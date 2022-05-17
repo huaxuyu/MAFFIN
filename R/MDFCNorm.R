@@ -78,7 +78,7 @@ MDFCNorm = function(FeatureTable, IntThreshold=0, SampleInCol=TRUE, output=FALSE
   FeatureTable_index = (2:ncol(FeatureTable))[c(temp)]
   group_vector = as.character(FeatureTable[1,FeatureTable_index])
 
-  if (sum(table(group_vector) != 0)) {
+  if (sum(table(group_vector) == 1)) {
     bwOpt = 0.25
   }
 
