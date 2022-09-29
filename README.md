@@ -60,7 +60,7 @@ MAFFINTable = MAFFINNorm(inputTable)
 
 ### Output
 The function `MAFFINNorm` returns a list contains 4 items.
-- `NormedTable` is the normzalized feature intensity table (data frame) with extra columns of the data processing results.
+- `NormedTable` is the normalized feature intensity table (data frame) with extra columns of the data processing results.
 - `NormFactor` is a named numeric vector of calculated normalization factors. Normalization factor reflects the relative concentrations of biological samples.
 - `OriPRMAD` is a numeric vector of PRMADs from original data before normalization (but after MS intensity correction).
 - `NormedPRMAD` is a numeric vector of PRMADs from normalized data.
