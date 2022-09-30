@@ -70,6 +70,17 @@ In particular, three columns are added in `NormedTable` compared to the input.
 - `Model` indicates the regression model for MS intensity correction.
 - `SQC_points` indicates the number of detected serial QC data that were used in MS intensity correction.
 
+To output the normalized feature intensity table `NormedTable` to a csv file
+```
+# This will output a csv file in your current working directory
+MAFFINTable = MAFFINNorm(inputTable, output=TRUE)
+
+# Output to a user-defined directory
+outputDir = ""  # define a directory for output
+setwd(outputDir)
+write.csv(MAFFINNorm(inputTable)[[1]], "normedTable.csv")
+```
+
 More descriptions are provided in R.
 ```
 # Find more descriptions of MAFFIN output
