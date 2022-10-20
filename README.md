@@ -113,4 +113,4 @@ prsd = EvaPRMAD(TestingData, GroupNames=c("HY", "SX", "SW", "YC"))
 ```
 
 ## Citation
-Yu, H., & Huan, T. (**2021**). MAFFIN: Metabolomics Sample Normalization Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected Signal Intensities. *bioRxiv*.
+Yu, H., & Huan, T. (**2022**). MAFFIN: Metabolomics Sample Normalization Using Maximal Density Fold Change with High-Quality Metabolic Features and Corrected Signal Intensities. *Bioinformatics*, 38(13): 3429-3437.
