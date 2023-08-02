@@ -15,4 +15,3 @@ Depends:
 Imports: 
     polynom,
     stringr,
-    preprocessCore
